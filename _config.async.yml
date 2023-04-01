@@ -46,9 +46,9 @@ top_bars:
     url: /
   - title: 进化之路
     url: /archives/
-  - title: 日常
+  - title: Link
     url: /links/
-  - title: Undefinde ^_^
+  - title: About
     url: /about/
   - title: 黑科技
     url: /customize_page/
@@ -126,16 +126,6 @@ post_pagination:
 highlight:
   title: mac
   height_limit: 200
-
-reward:
-  enable: fasle
-  methods:
-    - name: 微信
-      path: https://mp-8b005489-7724-4f8c-afdd-30192ff4f7ae.cdn.bspapp.com/cloudstorage/61a57135-2e65-4d51-8be1-03b8bd1c595e.jpg
-    - name: 支付宝
-      path: https://mp-8b005489-7724-4f8c-afdd-30192ff4f7ae.cdn.bspapp.com/cloudstorage/a21e9954-22f2-43fe-b3b0-3dba1fdde3ed.jpg
-    - name: QQ
-      path: https://mp-8b005489-7724-4f8c-afdd-30192ff4f7ae.cdn.bspapp.com/cloudstorage/69fb1903-d0dc-4169-9a02-1e76ec8e7761.jpg
 
 cover:
   default:
