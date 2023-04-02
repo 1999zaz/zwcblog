@@ -1,13 +1,12 @@
 theme:
-  switch: true
   default: style-light
 # 语言
 language: zh-Hans
 # 网站图标Favicon
 favicon:
   logo: /img/favicon.svg
-  icon16: /img/favicon.svg
-  icon32: /img/favicon.svg
+  icon16: favicon-16x16.png
+  icon32: favicon-32x32.png
   visibilitychange: true
 
 #用户信息
@@ -15,8 +14,10 @@ user:
   name: 张鱼锅巴
   first_name: 锅巴
   last_name: 张鱼
+  email: 1120306825@qq.com
   avatar: /img/avatar.jpg
-  describe: 云卷云舒
+  describe: 云卷云舒,
+  birthDay: 07/09/1999
 
 # The icon used by the theme
 icons:
@@ -44,15 +45,13 @@ icons:
 top_bars:
   - title: 首页
     url: /
-  - title: 进化之路
+  - title: 🌞光荣进化
     url: /archives/
-  - title: Link
-    url: /links/
-  - title: About
+  - title: 🤸About
     url: /about/
-  - title: 黑科技
+  - title: 🎃DIY
     url: /customize_page/
-  - title: 相册
+  - title: 📸相册
     url: /gallery/
 
 sidebar:
@@ -72,13 +71,28 @@ sidebar:
     - icon: fab fa-github
       url: https://github.com/MaLuns/Hexo-theme-async
       name: Github
-
+    - icon: fab fa-alipay
+      name: Alipay
+    - icon: fab fa-weixin
+      name: Weixin
 banner:
   index:
     type: img
     bgurl: https://pic1.zhimg.com/v2-b3c2c6745b9421a13a3c4706b19223b3_r.jpg?source=1940ef5c
-    bannerTitle: 树深时见鹿，<br>溪午不闻钟。
+    bannerTitle: 我见山河涌<br>似是故人来
     bannerText: Welcome to my World!
+  archive:
+    bgurl: https://images.pexels.com/photos/14530150/pexels-photo-14530150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1
+    bannerTitle: 这路遥马急的人间<br>⏳⏳⏳⏳⏳⏳
+    bannerText: The article archive
+  links:
+    bgurl: https://pic1.zhimg.com/v2-b3c2c6745b9421a13a3c4706b19223b3_r.jpg?source=1940ef5c
+    bannerTitle: 这是我的益达<br>不!是你的益达
+    bannerText: A link to a friend's website
+  about:
+    bgurl: https://pic1.zhimg.com/v2-b3c2c6745b9421a13a3c4706b19223b3_r.jpg?source=1940ef5c
+    bannerTitle: 你的...<br>头发乱了
+    bannerText: About me
 
 footer:
   powered:
