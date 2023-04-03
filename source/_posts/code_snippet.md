@@ -1,6 +1,8 @@
 ---
 title: Code Snippet
 date: 2023-01-05 15:08:29
+categories: 学习之路
+
 ---
 
 {% include_code lang:yaml config.yml %}

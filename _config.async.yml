@@ -16,8 +16,10 @@ user:
   last_name: 张鱼
   email: 1120306825@qq.com
   avatar: /img/avatar.jpg
+  domain: https://1999zaz.github.io
   describe: 云卷云舒,
   birthDay: 07/09/1999
+  ruleText: 暂不接受个人博客以外的友链申请，确保您的网站内容积极向上,部署HTTPS。
 
 # The icon used by the theme
 icons:
@@ -43,14 +45,14 @@ icons:
 # logo
 
 top_bars:
-  - title: 首页
+  - title: Home
     url: /
   - title: 🌞光荣进化
     url: /archives/
+  - title: 🎃Link
+    url: /links/
   - title: 🤸About
     url: /about/
-  - title: 🎃DIY
-    url: /customize_page/
   - title: 📸相册
     url: /gallery/
 
@@ -69,7 +71,7 @@ sidebar:
 
   social:
     - icon: fab fa-github
-      url: https://github.com/MaLuns/Hexo-theme-async
+      url: https://github.com/1999zaz
       name: Github
     - icon: fab fa-alipay
       name: Alipay
@@ -79,7 +81,7 @@ banner:
   index:
     type: img
     bgurl: https://pic1.zhimg.com/v2-b3c2c6745b9421a13a3c4706b19223b3_r.jpg?source=1940ef5c
-    bannerTitle: 我见山河涌<br>似是故人来
+    bannerTitle: 我见山河涌 似是故人来
     bannerText: Welcome to my World!
   archive:
     bgurl: https://images.pexels.com/photos/14530150/pexels-photo-14530150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1
@@ -87,8 +89,8 @@ banner:
     bannerText: The article archive
   links:
     bgurl: https://pic1.zhimg.com/v2-b3c2c6745b9421a13a3c4706b19223b3_r.jpg?source=1940ef5c
-    bannerTitle: 这是我的益达<br>不!是你的益达
-    bannerText: A link to a friend's website
+    bannerTitle: 这是我的益达 <br>不!是你的益达
+    bannerText: Between u and m
   about:
     bgurl: https://pic1.zhimg.com/v2-b3c2c6745b9421a13a3c4706b19223b3_r.jpg?source=1940ef5c
     bannerTitle: 你的...<br>头发乱了
@@ -168,3 +170,8 @@ cover:
     - https://th.wallhaven.cc/orig/8o/8o9vw1.jpg
     - https://th.wallhaven.cc/orig/x8/x8yy3o.jpg
   type: random
+
+categorie_card:
+  enable: true
+  len: 2
+  list: ["生活记录", "学习之路"]
