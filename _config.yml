@@ -104,4 +104,4 @@ theme: async
 deploy:
   type: git
   repo: https://github.com/1999zaz/1999zaz.github.io.git
-  branch: master
+  branch: gh-pages
