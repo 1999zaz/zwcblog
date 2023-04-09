@@ -127,9 +127,9 @@ swup: true
 
 toc:
   enable: true
-  list_number: false
-  max_depth: 3
-  min_depth: 1
+  list_number: true
+  max_depth: 10
+  min_depth: 3
 
 rightside:
   readmode: true
