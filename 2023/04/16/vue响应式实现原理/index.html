@@ -7,16 +7,20 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Zygb的Blog">
-<meta property="og:url" content="https://1999zaz.github.io/archives/index.html">
+<meta name="description" content="响应系统的实现原理  一个响应式数据最基本的实现依赖于对“读取”和“设置”操作的拦截，从而在副作用函数与响应式数据之间建立联系。  当“读取”操作发生时，我们将当前执行的副作用函数存储到“桶”中；当“设置”操作发生时，再将副作用函数从“桶”里取出并执行。  这就是响应系统的根本实现原理 响应式数据与副作用函数  副作用函数，这个函数执行会产生副作用的函数，比如全局变量或者影响别人使用  比如说下面">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue响应式实现原理">
+<meta property="og:url" content="https://1999zaz.github.io/2023/04/16/vue%E5%93%8D%E5%BA%94%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/index.html">
 <meta property="og:site_name" content="Zygb的Blog">
+<meta property="og:description" content="响应系统的实现原理  一个响应式数据最基本的实现依赖于对“读取”和“设置”操作的拦截，从而在副作用函数与响应式数据之间建立联系。  当“读取”操作发生时，我们将当前执行的副作用函数存储到“桶”中；当“设置”操作发生时，再将副作用函数从“桶”里取出并执行。  这就是响应系统的根本实现原理 响应式数据与副作用函数  副作用函数，这个函数执行会产生副作用的函数，比如全局变量或者影响别人使用  比如说下面">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-04-16T19:25:43.000Z">
+<meta property="article:modified_time" content="2023-04-16T12:09:27.740Z">
 <meta property="article:author" content="张鱼锅巴">
 <meta name="twitter:card" content="summary">
 
 
-<title >Zygb的Blog</title>
+<title >vue响应式实现原理</title>
 
 <!-- Favicon -->
 
@@ -58,7 +62,7 @@
 
 <!-- Variable -->
 <script>window.ASYNC_CONFIG = {"hostname":"1999zaz.github.io","author":"张鱼锅巴","root":"/","typed_text":["万事胜意"],"theme_version":"2.0.5","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/favicon.svg","icon16":"favicon-16x16.png","icon32":"favicon-32x32.png","appleTouchIcon":null,"webmanifest":null,"visibilitychange":true,"hidden":"/failure.ico","showText":"(/≧▽≦/)Hey! Good again!","hideText":"(●—●)Oh, crash!"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"covers":["/img/block.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":false,"isHome":false,"postUpdate":"2023-04-16 12:09:39"};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2023-04-16 12:09:27"};</script>
 
 <!-- Theme mode css -->
 <link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.0.5" id="trm-switch-style">
@@ -152,7 +156,7 @@
                 
             </li>
             
-            <li class="menu-item-has-children current-menu-item">
+            <li class="menu-item-has-children ">
                 <a  href="/archives/" target="">
                     🌞光荣进化
                 </a>
@@ -212,12 +216,13 @@
             <!-- top bar end -->
 
             <!-- body -->
-            <div class="trm-content-start">
+            
+<div class="trm-content-start">
     <!-- banner -->
     <div class="trm-banner" data-scroll data-scroll-direction="vertical">
     
     <!-- banner cover -->
-    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="https://images.pexels.com/photos/14530150/pexels-photo-14530150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3" src="https://pic1.zhimg.com/v2-b3c2c6745b9421a13a3c4706b19223b3_r.jpg">
     <!-- banner cover end -->
     
 
@@ -233,10 +238,10 @@
                     <!-- banner title -->
                     <div class="trm-banner-text ">
                         <div class="trm-label trm-mb-20">
-                            The article archive
+                            NEWS LETTER
                         </div>
                         <h1 class="trm-mb-30 trm-hsmb-font">
-                            这路遥马急的人间<br>⏳⏳⏳⏳⏳⏳
+                            vue响应式实现原理
                         </h1>
 
                         
@@ -246,7 +251,7 @@
                                 </li>
                                 <li>
                                     <span>
-                                        archives
+                                        2023
                                     </span
                                 ></li>
                             </ul>
@@ -278,7 +283,17 @@
 <div class="trm-main-card-frame trm-sidebar">
     <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
     
-        <!-- card header -->
+        <div class="trm-user-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item">
+                    <i class="iconfont fas fa-user-alt"></i>
+                </div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active">
+                    <i class="iconfont fas fa-th-list"></i>
+                </div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
 <div class="trm-mc-header">
     <div class="trm-avatar-frame trm-mb-20">
         <img alt="Avatar" class="trm-avatar" src="/img/avatar.jpg">
@@ -296,7 +311,7 @@
     
 </div>
 <!-- card header end -->
-        <!-- sidebar social -->
+                <!-- sidebar social -->
 
 <div class="trm-divider trm-mb-40 trm-mt-40"></div>
 <div class="trm-social">
@@ -316,7 +331,7 @@
 </div>
 
 <!-- sidebar social end -->
-        <!-- info -->
+                <!-- info -->
 <div class="trm-divider trm-mb-40 trm-mt-40"></div>
 <ul class="trm-table trm-mb-20">
     
@@ -359,7 +374,7 @@
 </ul>
 <!-- info end -->
 
-        
+                
     <div class="trm-divider trm-mb-40 trm-mt-40"></div>
     <!-- action button -->
     <div class="text-center">
@@ -370,6 +385,13 @@
     </div>
     <!-- action button end -->
 
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#响应系统的实现原理"  data-scroll-to="#响应系统的实现原理"><span class="toc-number">1.</span> <span class="toc-text">响应系统的实现原理</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#响应式数据与副作用函数"  data-scroll-to="#响应式数据与副作用函数"><span class="toc-number">2.</span> <span class="toc-text">响应式数据与副作用函数</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#响应式数据的实现原理"  data-scroll-to="#响应式数据的实现原理"><span class="toc-number">3.</span> <span class="toc-text">响应式数据的实现原理</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#调度执行"  data-scroll-to="#调度执行"><span class="toc-number">4.</span> <span class="toc-text">调度执行</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#响应式具体实现"  data-scroll-to="#响应式具体实现"><span class="toc-number">5.</span> <span class="toc-text">响应式具体实现</span></a></li></ol>
+</div>
+            </div>
+        </div>
     
     </div>
 </div>
@@ -380,315 +402,111 @@
                 <div class="trm-content" id="trm-content">
                     <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
 
-                    <div class="row">
-    <div class="col-lg-12">
-        <div class="trm-card">
-            <div style="padding: 0 20px;">
-                
-                    <ul class="row trm-list" style="margin-bottom: 0px;"><li class="col-lg-4 trm-list-item" style="margin: 6px 0;"><a class="archive-list-link" href="/archives/2023/">2023</a><span class="archive-list-count">（7）</span></li><li class="col-lg-4 trm-list-item" style="margin: 6px 0;"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">（4）</span></li></ul>
-                
-            </div>
+                    <div id="post-info" class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            04/16
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            19:25
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            张鱼锅巴
         </div>
     </div>
 </div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h3 id="响应系统的实现原理"><a href="#响应系统的实现原理" class="headerlink" title="响应系统的实现原理"></a>响应系统的实现原理</h3><p>  一个响应式数据最基本的实现依赖于对“读取”和“设置”操作的拦截，从而在副作用函数与响应式数据之间建立联系。<br>  当“读取”操作发生时，我们将当前执行的副作用函数存储到“桶”中；当“设置”操作发生时，再将副作用函数从“桶”里取出并执行。<br>  这就是响应系统的<strong>根本实现原理</strong></p>
+<h3 id="响应式数据与副作用函数"><a href="#响应式数据与副作用函数" class="headerlink" title="响应式数据与副作用函数"></a>响应式数据与副作用函数</h3><p>  副作用函数，这个函数执行会产生副作用的函数，比如全局变量或者影响别人使用<br>  比如说下面这个函数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">   <span class="keyword">function</span> <span class="function"><span class="title">modidyArr</span></span>()&#123;</span><br><span class="line">  const arr = [1,2,3]</span><br><span class="line">  setTimeout(()=&gt;&#123;</span><br><span class="line">  arr.pop()</span><br><span class="line">  &#125;,<span class="number">200</span>)</span><br><span class="line">  return arr</span><br><span class="line">  &#125;</span><br><span class="line">  const res = modidyArr()</span><br><span class="line">  console.log(res,&#x27;返回的值&#x27;)</span><br><span class="line"></span><br><span class="line">  setTimeout(()=&gt;&#123;</span><br><span class="line">  console.log(res,&#x27;返回的值，和上次返回的结果不一样&#x27;)</span><br><span class="line">&#125;,<span class="number">300</span>)</span><br></pre></td></tr></table></figure>
 
-<!-- history -->
+<p>  响应式数据，当下面的 obj 的 text 变化的时候 effect 能够被重新执行，这就叫响应式数据，自己变化了，所用到自己的所有函数都要重新执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const obj = &#123;text:<span class="string">&quot;hello world&quot;</span>&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">effect</span></span>()&#123;</span><br><span class="line">document.body.innerText = obj.text</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<div class="row">
+<h3 id="响应式数据的实现原理"><a href="#响应式数据的实现原理" class="headerlink" title="响应式数据的实现原理"></a>响应式数据的实现原理</h3><p>  只细观察可以发现，副作用函数 effect 执行的时候，会触发 obj.text 的读取操作，</p>
+<p>  修改 obj.text 的时候会触发 obj.text 的设置操作</p>
+<p>  如果我们可以拦截这个对象的读取和设置操作，这个事情就变的简单了</p>
+<p>  当我们读取这个字段的时候，把副作用函数存到某一个桶里面，当这个对像被设置或者修改的时候，就把这个桶里面的副作用函数取出来执行</p>
+<p>  如此以来就达到了数据变化，函数重新执行。</p>
+<p>  在 vue3 使用的是 Proxy 进行拦截和设置</p>
+<p>  具体实现参考文章代码，或者看我本地代码，太长了</p>
+<h3 id="调度执行"><a href="#调度执行" class="headerlink" title="调度执行"></a>调度执行</h3><p>  响应式系统在数据变化的时候有能力决定副作用函数执行的时机次数和方式。通常是在 effect 函数在设计一个选项参数，允许用户指定调度器，任务队列，再后来的 computed 和 watch 等实现中都用到了</p>
+<p>  例如 computed 的粗糙实现( computed 计算属性实际上是一个懒执行的副作用函数)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> computed(getter)&#123;</span><br><span class="line">  const effectFn = effect(getter,&#123;lazy:<span class="literal">true</span>&#125;) // 建立副作用函数,把这个 getter 放到那个桶里去，只要里面用的数据变化了，就会重新执行</span><br><span class="line">  const obj = &#123;</span><br><span class="line">  get <span class="function"><span class="title">value</span></span>()&#123;</span><br><span class="line">  <span class="built_in">return</span> effectFn() // 读取时，才执行 effectFn</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">return</span> obj</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>  watch 本质就是观测响应式数据，数据变化，通知执行相对应地回调函数,利用调度执行的 scheduler 选项即可实现(它本质上利用了副作用函数重新执行时的可调度性)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">function</span> watch(<span class="built_in">source</span>,<span class="built_in">cd</span>)&#123;</span><br><span class="line">  effect(<span class="built_in">source</span>,&#123;</span><br><span class="line">  <span class="function"><span class="title">scheduler</span></span>()&#123;</span><br><span class="line">  <span class="built_in">cd</span>()</span><br><span class="line">  &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="响应式具体实现"><a href="#响应式具体实现" class="headerlink" title="响应式具体实现"></a>响应式具体实现</h3><p>  proxy 只能代理对象，原始类型的值我们需要用对象包装一层，进行代理。</p>
+<p>  使用 Reflect 进行对象操作</p>
+<p>  set&#x2F;map&#x2F;array 在 proxy 都做了单独的处理，保证在获取和设置的时候可以响应式的变化</p>
+<p>  浅响应与深响应，只读和浅读都做了处理</p>
+<p>  原始类型函数进行封装</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> ref(val)&#123;</span><br><span class="line">  // 内部创建包装对象</span><br><span class="line">  const wrapper = &#123;</span><br><span class="line">  value: val</span><br><span class="line">  &#125;</span><br><span class="line">  // 区分是 ref 来源的数据</span><br><span class="line">  Object.defineProperty(wrapper,<span class="string">&#x27;\_\_v_isRef&#x27;</span>,&#123;value: <span class="literal">true</span>&#125;)</span><br><span class="line">  // 包装对象变成响应式数据</span><br><span class="line">  <span class="built_in">return</span> reactive(wrapper)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>  还另外实现了 toRef 和 toRefs 等对响适应数据做的一层处理</p>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        张鱼锅巴
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a id="original-link" target="_blank" rel="noopener" href="https://sunseekers.github.io/2023/04/13/vuejs/#%E5%93%8D%E5%BA%94%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%8E%E5%89%AF%E4%BD%9C%E7%94%A8%E5%87%BD%E6%95%B0" title="vue响应式实现原理">https://sunseekers.github.io/2023/04/13/vuejs/#%E5%93%8D%E5%BA%94%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%B8%8E%E5%89%AF%E4%BD%9C%E7%94%A8%E5%87%BD%E6%95%B0</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+</div>
+<div id="post-next-prev" class="row">
     <div class="col-lg-12">
         <!-- title -->
         <h5 class="trm-title-with-divider">
-            
-                All Archives
-            
-            <span data-number="01"></span>
+            Other Articles
+            <span data-number="02"></span>
         </h5>
     </div>
-    <div class="col-lg-12">
-        <!-- timeline -->
-        <div class="trm-timeline">
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el" data-scroll="" data-scroll-offset="40">
+        <div class="trm-older-publication">
             
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/04/16/vue%E5%93%8D%E5%BA%94%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" class="trm-anima-link">
-                                        vue响应式实现原理
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">04/16</li>
-                                        <li class="trm-accent-color">19:25</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/04/09/2023-4-9/" class="trm-anima-link">
-                                        今日无事.勾栏听曲
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">04/09</li>
-                                        <li class="trm-accent-color">16:09</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/04/06/%E7%AE%A1%E7%90%86%E7%B1%BB%E9%A1%B9%E7%9B%AE/" class="trm-anima-link">
-                                        管理类项目
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">04/06</li>
-                                        <li class="trm-accent-color">16:03</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/04/06/%E5%A6%82%E4%BD%95%E5%88%86%E6%9E%90%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE/" class="trm-anima-link">
-                                        如何分析一个项目
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">04/06</li>
-                                        <li class="trm-accent-color">10:22</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/04/06/%E6%97%A5%E5%BF%97/" class="trm-anima-link">
-                                        日志
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">04/06</li>
-                                        <li class="trm-accent-color">08:34</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/04/03/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%97%A0%E6%84%9F%E5%88%B7%E6%96%B0/" class="trm-anima-link">
-                                        小程序是如何实现无感刷新
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">04/03</li>
-                                        <li class="trm-accent-color">19:29</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/01/05/code_snippet/" class="trm-anima-link">
-                                        Code Snippet
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">01/05</li>
-                                        <li class="trm-accent-color">15:08</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2022/12/30/tag_plugins/" class="trm-anima-link">
-                                        Tag Plugins
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">12/30</li>
-                                        <li class="trm-accent-color">15:08</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                            <div class="trm-publication trm-mt-15">
-                                <p>主题内置的一些标签插件说明和示例。</p>
-                            </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2022/09/22/katex/" class="trm-anima-link">
-                                        KaTeX
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">09/22</li>
-                                        <li class="trm-accent-color">15:45</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2022/09/21/markdown/" class="trm-anima-link">
-                                        Markdown
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">09/21</li>
-                                        <li class="trm-accent-color">15:25</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                            <div class="trm-publication trm-mt-15">
-                                <p>主题 Hexo-theme-async 文章页面适配预览。</p>
-                            </div>
-                        
-                    
-                </div>
-            </div>
-            
+            <a class="trm-op-top trm-anima-link" href="/2023/04/09/2023-4-9/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="http://p3.music.126.net/25p9yHX86pKCtfCoQP9vSw==/109951167749720080.jpg">
+                </span>
+                <h6 class="trm-op-title">今日无事.勾栏听曲</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/04/09</li>
+                <li>16:09</li>
+                <li>生活记录</li>
+            </ul>
         </div>
-        <!-- timeline end -->
     </div>
 </div>
+    
+</div>
 
-<!-- history end -->
-
-
-    <div class="trm-pagination">
-        <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a>
-    </div>
-
-
+    
 
 
 
@@ -752,6 +570,10 @@
             <!-- body end -->
 
             <div class="trm-fixed-container" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
     
     
         <div class="trm-fixed-btn" data-title="Toggle between single-column and double-column" onclick="asyncFun.switchSingleColumn()">
@@ -839,6 +661,10 @@
     
 
     <!-- 评论插件 -->
+    
+        
+
+        
     
 
 
