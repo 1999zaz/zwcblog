@@ -1,6 +1,6 @@
 ---
 title: Hello Theme Async
-date: 2021-09-21 15:08:29
+date: 2022-09-21 15:08:29
 categories: 学习之路
 cover: [https://hexo-theme-async.imalun.com/imgs/demo2.png]
 ---

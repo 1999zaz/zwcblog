@@ -1,6 +1,6 @@
 ---
 title: KaTeX
-date: 2021-09-22 15:45:29
+date: 2022-09-22 15:45:29
 katex: true
 toc: false
 categories: 学习之路
